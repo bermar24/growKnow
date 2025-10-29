@@ -10,7 +10,6 @@ class ArticleStatus(models.TextChoices):
 
 # The core News Article model
 class NewsArticle(models.Model):
-    objects = None
     title = models.CharField(max_length=255)
     content = models.TextField()
     source_link = models.URLField(max_length=500)

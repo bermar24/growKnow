@@ -76,10 +76,10 @@ Open an issue or start a discussion in this repository.
 
 ##  Testing:
 1. Rerun makemigrations
-python manage.py makemigrations news
+``` python manage.py makemigrations news ```
 
 2. Apply all migrations
-python manage.py migrate
+``` python manage.py migrate ```
 
 3. Run the Behave tests
-python manage.py behave
+``` python manage.py behave ```
