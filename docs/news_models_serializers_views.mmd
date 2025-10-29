@@ -1,0 +1,108 @@
+%% Mermaid class diagram showing Models / Serializers / Views sections
+classDiagram
+    direction LR
+
+    class Models {
+        <<Section>>
+    }
+
+    class Serializers {
+        <<Section>>
+    }
+
+    class Views {
+        <<Section>>
+    }
+
+    %% --- Models ---
+    class ArticleStatus {
+        <<Model>>
+        +DRAFT: str = "DR"
+        +PENDING_REVIEW: str = "PR"
+        +PUBLISHED: str = "PB"
+        +ERROR: str = "ER"
+    }
+
+    class NewsArticle {
+        <<Model>>
+        +title: CharField
+        +content: TextField
+        +source_link: URLField
+        +status: CharField
+        +created_at: DateTimeField
+        +published_at: DateTimeField?
+        +relevance_score: FloatField
+        +industry_tags: JSONField
+        +author: ForeignKey(User)?
+    }
+
+    class AuditLog {
+        <<Model>>
+        +action: CharField
+        +timestamp: DateTimeField
+        +actor: ForeignKey(User)?
+        +article: ForeignKey(NewsArticle)?
+    }
+
+    %% --- Serializers ---
+    class NewsArticleSerializer {
+        <<Serializer>>
+        +Meta.model = NewsArticle
+        +Meta.fields = "__all__"
+    }
+
+    class AuditLogSerializer {
+        <<Serializer>>
+        +Meta.model = AuditLog
+        +Meta.fields = ("id","action","timestamp","actor","article")
+    }
+
+    %% --- Views ---
+    class NewsArticleViewSet {
+        <<View>>
+        +queryset = NewsArticle.objects.all()
+        +serializer_class = NewsArticleSerializer
+        +publish()
+    }
+
+    class AuditLogViewSet {
+        <<View>>
+        +queryset = AuditLog.objects.all()
+        +serializer_class = AuditLogSerializer
+    }
+
+    class AdminDraftView {
+        <<View>>
+        +list_drafts()
+        +approve_draft()
+        +delete_draft()
+    }
+
+    %% Section hierarchy
+    Models <|-- ArticleStatus
+    Models <|-- NewsArticle
+    Models <|-- AuditLog
+
+    Serializers <|-- NewsArticleSerializer
+    Serializers <|-- AuditLogSerializer
+
+    Views <|-- NewsArticleViewSet
+    Views <|-- AuditLogViewSet
+    Views <|-- AdminDraftView
+
+    %% Relationships between layers
+    NewsArticleSerializer --> NewsArticle : serializes
+    AuditLogSerializer --> AuditLog : serializes
+
+    NewsArticleViewSet ..> NewsArticleSerializer : uses
+    NewsArticleViewSet ..> NewsArticle : queryset
+    NewsArticleViewSet ..> ArticleStatus : updates status
+
+    AuditLogViewSet ..> AuditLogSerializer : uses
+    AuditLogViewSet ..> AuditLog : queryset
+
+    AdminDraftView ..> NewsArticle : moderates
+    AdminDraftView ..> NewsArticleSerializer : renders draft data
+    AdminDraftView ..> AuditLog : records actions
+
+%% Styling (logical groupings placeholder)
