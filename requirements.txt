@@ -1,0 +1,14 @@
+# Development / test dependencies (pinned for repeatable installs)
+Django==5.2.7
+behave==1.2.7
+behave-django==2.0.2
+
+# Install with:
+# python -m venv .venv
+# source .venv/bin/activate
+#  pip install -r requirements.txt
+
+
+# python manage.py makemigrations news
+# python manage.py migrate
+# python manage.py behave

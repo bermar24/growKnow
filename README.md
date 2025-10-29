@@ -74,12 +74,14 @@ We welcome contributions!
 
 Open an issue or start a discussion in this repository.  
 
-##  Testing:
-1. Rerun makemigrations
-``` python manage.py makemigrations news ```
 
-2. Apply all migrations
-``` python manage.py migrate ```
+# Frontend (frontend)
+Quick start (from the project root):
 
-3. Run the Behave tests
-``` python manage.py behave ```
+```bash
+cd frontend
+# Install dependencies with npm (will create/update package-lock.json)
+npm install 
+# Start the dev server
+npm run dev
+```
