@@ -1,0 +1,37 @@
+classDiagram
+    direction TB
+
+    class ArticleStatus {
+        <<enumeration>>
+        +DRAFT = "DR"
+        +PENDING_REVIEW = "PR"
+        +PUBLISHED = "PB"
+        +ERROR = "ER"
+    }
+
+    class NewsArticle {
+        +CharField title
+        +TextField content
+        +URLField source_link
+        +CharField status = DRAFT
+        +DateTimeField created_at
+        +DateTimeField published_at?
+        +FloatField relevance_score = 0.0
+        +JSONField industry_tags []
+    }
+
+    class AuditLog {
+        +CharField action
+        +DateTimeField timestamp
+        +ForeignKey actor?
+        +ForeignKey article?
+    }
+
+    class User {
+        <<Django auth>>
+    }
+
+    NewsArticle --> User : author (0..1)
+    AuditLog --> User : actor (0..1)
+    AuditLog --> NewsArticle : article (0..1)
+    NewsArticle ..> ArticleStatus : uses status choices
